@@ -1,22 +1,5 @@
 const { default: axios } = require('axios');
-const fs = require('fs');
 const express = require('express');
-
-const AWS = require('aws-sdk');
-
-AWS.config.update({
-  accessKeyId: "AKIAY47BG72O7POQH3FD",
-  secretAccessKey: "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",
-  "region": "eu-west-2"
-});
-// AWS.config.update({ region: 'eu-west-2' });
-
-const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-// https://api-demo-harish.s3.eu-west-2.amazonaws.com/demo.json
-const bucket = 'api-demo-harish';
-
-const bucketParams = { Bucket: bucket, Key: 'demo.json' };
-const uploadBucketParams = { Bucket: bucket, Key: 'test.json' };
 
 const app = express();
 
@@ -81,28 +64,6 @@ app.post('/endpoint1', async (req, res, json) => {
       },
     });
   }
-});
-
-app.get('/api/triggerBucket', async (req, res, next) => {
-  s3.getObject(bucketParams, function (err, data) {
-    const stringData = data.Body.toString();
-    const jsonData = JSON.parse(stringData);
-    const modifiedData = jsonData.map((d, index) => {
-      d.addedKey = `Adding the new key for demo : ${index + 4}`;
-      return d;
-    });
-    
-    uploadBucketParams['Body'] = JSON.stringify(modifiedData);
-    uploadBucketParams['ContentType'] = "application/json";
-    s3.upload(uploadBucketParams, function (err,data) {
-      console.log(JSON.stringify(err) + " " + JSON.stringify(data));
-    });
-  });
-  return res.status(200).json({
-    data: {
-      message: 'Request successful',
-    },
-  });
 });
 
 app.listen(appPort, () => {
