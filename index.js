@@ -5,15 +5,14 @@ const express = require('express');
 const AWS = require('aws-sdk');
 
 AWS.config.update({
-  accessKeyId: "AKIAY47BG72O7POQH3FD",
-  secretAccessKey: "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",
+  accessKeyId: "",
+  secretAccessKey: "",
   "region": "eu-west-2"
 });
 // AWS.config.update({ region: 'eu-west-2' });
 
 const s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-// https://api-demo-harish.s3.eu-west-2.amazonaws.com/demo.json
-const bucket = 'api-demo-harish';
+const bucket = '';
 
 const bucketParams = { Bucket: bucket, Key: 'demo.json' };
 const uploadBucketParams = { Bucket: bucket, Key: 'test.json' };
